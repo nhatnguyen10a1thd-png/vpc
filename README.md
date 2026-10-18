@@ -168,5 +168,5 @@ Hệ thống được thiết kế với 6 giai đoạn kiểm thử:
    [`https://github.com/nhatnguyen10a1thd-png/vpc/blob/main/docs/services-and-prerequisites.md`](https://github.com/nhatnguyen10a1thd-png/vpc/blob/main/docs/services-and-prerequisites.md)
 
 ### 7.2. Các liên kết Commit cụ thể:
-*(Được trích xuất từ mã băm commit cụ thể sau khi đẩy lên GitHub nhánh `main`)*
-- Commit thiết kế kiến trúc tuần 1: `https://github.com/nhatnguyen10a1thd-png/vpc/commit/<COMMIT_HASH>`
+1. **Commit tài liệu thiết kế kiến trúc tuần 1 (Sơ đồ 2 VPC, strongSwan IPsec, CIDR/Subnet & Kế hoạch kiểm thử):**  
+   [`https://github.com/nhatnguyen10a1thd-png/vpc/commit/ee31f980a4f7f0bf9ae179ff97751d8ee241ced7`](https://github.com/nhatnguyen10a1thd-png/vpc/commit/ee31f980a4f7f0bf9ae179ff97751d8ee241ced7)
