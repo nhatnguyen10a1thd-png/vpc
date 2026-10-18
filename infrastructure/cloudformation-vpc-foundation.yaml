@@ -1,0 +1,242 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Hybrid Cloud Site-to-Site VPN Simulation - Foundation Infrastructure (Week 1)
+  Course: Cloud - Dot 1 - 2026-2027 | GVHD: Huynh Xuan Phung | Student: Nhat Nguyen
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: Hybrid-Cloud-VPN
+    Description: Project identifier for resource naming and tagging
+  Environment:
+    Type: String
+    Default: Lab-Simulation
+    Description: Environment stage
+  Course:
+    Type: String
+    Default: Cloud-Dot1-2026-2027
+    Description: Academic course identification
+  Instructor:
+    Type: String
+    Default: HuynhXuanPhung
+    Description: Academic supervisor
+  Owner:
+    Type: String
+    Default: NhatNguyen
+    Description: Project author
+
+Resources:
+  # =========================================================================
+  # 1. PRIMARY VPC (Simulated AWS Cloud Production - 10.20.0.0/16)
+  # =========================================================================
+  CloudVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.20.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${ProjectName}-vpc-cloud'
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Course
+          Value: !Ref Course
+        - Key: Instructor
+          Value: !Ref Instructor
+        - Key: Owner
+          Value: !Ref Owner
+
+  CloudInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub '${ProjectName}-igw-cloud'
+        - Key: Project
+          Value: !Ref ProjectName
+
+  AttachCloudIGW:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref CloudVPC
+      InternetGatewayId: !Ref CloudInternetGateway
+
+  CloudVPNSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref CloudVPC
+      CidrBlock: 10.20.1.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${ProjectName}-cloud-vpn-subnet-a'
+        - Key: Type
+          Value: Public-Gateway
+        - Key: Project
+          Value: !Ref ProjectName
+
+  CloudWorkloadSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref CloudVPC
+      CidrBlock: 10.20.10.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub '${ProjectName}-cloud-workload-subnet-a'
+        - Key: Type
+          Value: Private-Workload
+        - Key: Project
+          Value: !Ref ProjectName
+
+  CloudPublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref CloudVPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${ProjectName}-rtb-cloud-public'
+        - Key: Project
+          Value: !Ref ProjectName
+
+  CloudPublicDefaultRoute:
+    Type: AWS::EC2::Route
+    DependsOn: AttachCloudIGW
+    Properties:
+      RouteTableId: !Ref CloudPublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref CloudInternetGateway
+
+  CloudVPNSubnetRouteTableAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref CloudVPNSubnet
+      RouteTableId: !Ref CloudPublicRouteTable
+
+  CloudPrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref CloudVPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${ProjectName}-rtb-cloud-private'
+        - Key: Project
+          Value: !Ref ProjectName
+
+  CloudWorkloadSubnetRouteTableAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref CloudWorkloadSubnet
+      RouteTableId: !Ref CloudPrivateRouteTable
+
+  # Security Groups
+  CloudVPNGatewaySG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Cloud strongSwan Edge Gateway
+      VpcId: !Ref CloudVPC
+      SecurityGroupIngress:
+        - IpProtocol: udp
+          FromPort: 500
+          ToPort: 500
+          CidrIp: 0.0.0.0/0
+          Description: IKE SA negotiation
+        - IpProtocol: udp
+          FromPort: 4500
+          ToPort: 4500
+          CidrIp: 0.0.0.0/0
+          Description: NAT-Traversal IPsec
+        - IpProtocol: '50'
+          CidrIp: 0.0.0.0/0
+          Description: ESP protocol
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+          Description: SSH administration
+        - IpProtocol: icmp
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+          Description: ICMP ping diagnostics
+        - IpProtocol: -1
+          CidrIp: 10.10.0.0/16
+          Description: Allow all traffic routed from On-Premises network (10.10.0.0/16)
+      Tags:
+        - Key: Name
+          Value: !Sub '${ProjectName}-sg-cloud-gateway'
+        - Key: Project
+          Value: !Ref ProjectName
+
+  CloudWorkloadSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for internal Cloud workloads (isolated)
+      VpcId: !Ref CloudVPC
+      SecurityGroupIngress:
+        - IpProtocol: icmp
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 10.10.0.0/16
+          Description: Allow ICMP from On-Premises
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 10.10.0.0/16
+          Description: Allow HTTP web traffic from On-Premises
+        - IpProtocol: tcp
+          FromPort: 5201
+          ToPort: 5201
+          CidrIp: 10.10.0.0/16
+          Description: Allow iperf3 throughput testing
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 10.20.1.0/24
+          Description: Allow SSH bastion jumping from VPN subnet
+      Tags:
+        - Key: Name
+          Value: !Sub '${ProjectName}-sg-cloud-workload'
+        - Key: Project
+          Value: !Ref ProjectName
+
+  # S3 Bucket for Configuration & Script Storage
+  FoundationConfigBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'hybrid-vpn-foundation-${AWS::AccountId}-${AWS::Region}'
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${ProjectName}-config-bucket'
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: !Ref Owner
+
+Outputs:
+  CloudVPCId:
+    Description: VPC ID of AWS Cloud Production VPC
+    Value: !Ref CloudVPC
+    Export:
+      Name: !Sub '${ProjectName}-CloudVPCId'
+  CloudVPNSubnetId:
+    Description: Subnet ID for Cloud strongSwan Gateway
+    Value: !Ref CloudVPNSubnet
+  CloudWorkloadSubnetId:
+    Description: Subnet ID for Cloud Workload Server
+    Value: !Ref CloudWorkloadSubnet
+  ConfigBucketName:
+    Description: S3 Bucket Name for configuration storage
+    Value: !Ref FoundationConfigBucket
