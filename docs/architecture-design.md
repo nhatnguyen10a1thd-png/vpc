@@ -17,7 +17,9 @@ Dự án triển khai mô hình **Hybrid Cloud Network** mô phỏng môi trư�
 
 ### Sơ đồ kiến trúc tổng thể (Architecture Vector Diagram)
 
-![Hybrid Cloud VPN Architecture](../assets/architecture-diagram.svg)
+<div align="center">
+  <img src="../assets/architecture-diagram.svg" alt="Hybrid Cloud VPN Architecture" width="100%">
+</div>
 
 ---
 
@@ -142,7 +144,9 @@ sudo iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --se
 - Loại: Route 53 Private Hosted Zone (PHZ)
 - Được liên kết (Associated) với cả hai VPC: `vpc-cloud-useast1` (`10.20.0.0/16`) và `vpc-onprem-uswest2` (`10.10.0.0/16`).
 
-![Route 53 Hybrid DNS Workflow](../assets/hybrid-dns-diagram.svg)
+<div align="center">
+  <img src="../assets/hybrid-dns-diagram.svg" alt="Route 53 Hybrid DNS Workflow" width="100%">
+</div>
 
 ### Cơ chế liên kết Cross-VPC cho Private Hosted Zone:
 1. Tạo Private Hosted Zone `corp.internal` gắn với `vpc-cloud-useast1` (tại `us-east-1`).
