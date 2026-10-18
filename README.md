@@ -170,3 +170,5 @@ Hệ thống được thiết kế với 6 giai đoạn kiểm thử:
 ### 7.2. Các liên kết Commit cụ thể:
 1. **Commit tài liệu thiết kế kiến trúc tuần 1 (Sơ đồ 2 VPC, strongSwan IPsec, CIDR/Subnet & Kế hoạch kiểm thử):**  
    [`https://github.com/nhatnguyen10a1thd-png/vpc/commit/ee31f980a4f7f0bf9ae179ff97751d8ee241ced7`](https://github.com/nhatnguyen10a1thd-png/vpc/commit/ee31f980a4f7f0bf9ae179ff97751d8ee241ced7)
+2. **Commit tối ưu hóa hiển thị sơ đồ kiến trúc kích thước lớn, độ tương phản cao và rõ nét:**  
+   [`https://github.com/nhatnguyen10a1thd-png/vpc/commit/8f2a95166299b6422b5e28c467a98eb0ffef9e18`](https://github.com/nhatnguyen10a1thd-png/vpc/commit/8f2a95166299b6422b5e28c467a98eb0ffef9e18)
