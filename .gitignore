@@ -1,0 +1,23 @@
+# ==============================================================================
+# .gitignore - Hybrid Cloud VPN Project
+# ==============================================================================
+
+# Private local manual guides
+manual-guide/
+
+# Infrastructure automation templates & scripts (hidden from public repository)
+infrastructure/
+
+# Sensitive credentials & keys
+*.pem
+*.key
+*.id_rsa
+*.id_rsa.pub
+
+# OS & Editor temporary files
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp
+.vscode/
+.idea/

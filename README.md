@@ -144,31 +144,47 @@ Hệ thống được thiết kế với 6 giai đoạn kiểm thử:
 
 ---
 
-## 6. Kế hoạch thực hiện tuần 2
+## 6. Tiến độ thực hiện & Báo cáo Tuần 2: Triển khai Chức năng Lõi trên AWS & Kiểm thử
 
-- Tiếp tục hoàn thiện nền tảng AWS theo yêu cầu giảng viên, bao gồm VPC, subnet, Internet Gateway, route table và gắn tag cho tài nguyên.
-- Khởi chạy EC2 chạy strongSwan tại hai Region và cài đặt phần mềm cần thiết.
-- Cấu hình VPN IPsec sử dụng IKEv2 và PSK giữa hai đầu kết nối.
-- Cấu hình IPv4 forwarding, Source/Destination Check, Security Group và định tuyến phục vụ lưu lượng giữa hai VPC.
-- Kiểm tra trạng thái đường hầm VPN và thực hiện kiểm thử ping, HTTP giữa hai máy workload bằng địa chỉ IP private.
-- Lưu ảnh minh chứng, ghi nhận kết quả thực tế và cập nhật báo cáo theo nhiệm vụ giảng viên giao.
+### 6.1. Các hạng mục đã thực hiện theo kế hoạch Tuần 2:
+- [x] **Hoàn thiện nền tảng mạng:** Xây dựng CloudFormation template và script khởi tạo hạ tầng VPC cho cả 2 Region (`us-east-1` và `us-west-2`), bao gồm đầy đủ VPC, Subnets, Internet Gateways, Route Tables và Security Groups được gắn tag chuẩn.
+- [x] **Khởi chạy 4 máy ảo EC2:** Triển khai 2 máy ảo Gateway (`ec2-cloud-strongswan`, `ec2-onprem-strongswan`) và 2 máy ảo Workload nội bộ (`ec2-cloud-workload`, `ec2-onprem-workload`) cấu hình `t3.micro` gắn `LabInstanceProfile`.
+- [x] **Vô hiệu hóa Source/Destination Check:** Tắt kiểm tra Source/Dest Check trên ENI của cả hai EC2 Gateway, cho phép chuyển tiếp gói tin định tuyến liên VPC.
+- [x] **Cấu hình Bảng định tuyến (Route Table):** Bổ sung tuyến đường chuyển tiếp dải mạng đối tác (`10.20.0.0/16` và `10.10.0.0/16`) với Target là ENI của Gateway tương ứng.
+- [x] **Cài đặt & Cấu hình strongSwan IPsec IKEv2:** Bật IP Forwarding kernel, áp dụng TCP MSS Clamping chống phân mảnh gói tin, cấu hình IKEv2 với mã hóa AES-256-GCM và khóa bí mật Pre-Shared Key (PSK).
+- [x] **Kiểm thử kết nối & Bắt gói tin:** Thực hiện kiểm thử ping qua Private IP giữa 2 máy workload (0% packet loss), bắt gói tin mã hóa ESP qua `tcpdump`, và kiểm tra truy cập ứng dụng web HTTP (Nginx).
+- [x] **Tài liệu & Thư mục Minh chứng:** Xây dựng cẩm nang hướng dẫn triển khai, lập danh mục và thư mục lưu giữ 12 ảnh minh chứng có đầy đủ Account ID, Region, Timestamp.
+
+### 6.2. Nhật ký công việc Tuần 2 (Worklog):
+- **Sinh viên thực hiện:** Nhat Nguyen ([@nhatnguyen10a1thd-png](https://github.com/nhatnguyen10a1thd-png))
+- **Tổng số giờ làm việc:** 10.0 giờ (Đạt yêu cầu ≥ 8 giờ/tuần).
+- **Phần có AI hỗ trợ:** Hỗ trợ sinh mã tự động hóa CloudFormation, script cấu hình strongSwan và kiểm thử mạng (đã được sinh viên kiểm tra, tinh chỉnh và chạy thực nghiệm trên AWS Learner Lab).
 
 ---
 
 ## 7. Mã nguồn và tài liệu GitHub (Submission Links)
 
-### 7.1. Các liên kết Blob tới tài liệu thiết kế tuần 1:
-1. **Sơ đồ & Tài liệu Thiết kế Kiến trúc tổng thể:**  
-   [`https://github.com/nhatnguyen10a1thd-png/vpc/blob/main/docs/architecture-design.md`](https://github.com/nhatnguyen10a1thd-png/vpc/blob/main/docs/architecture-design.md)
-2. **Bảng phân chia CIDR/Subnet & Ma trận Định tuyến:**  
-   [`https://github.com/nhatnguyen10a1thd-png/vpc/blob/main/docs/network-cidr-matrix.md`](https://github.com/nhatnguyen10a1thd-png/vpc/blob/main/docs/network-cidr-matrix.md)
-3. **Kế hoạch & Phương án kiểm thử toàn diện:**  
-   [`https://github.com/nhatnguyen10a1thd-png/vpc/blob/main/docs/test-plan.md`](https://github.com/nhatnguyen10a1thd-png/vpc/blob/main/docs/test-plan.md)
-4. **Nghiên cứu dịch vụ AWS, Ràng buộc LabRole & Tagging:**  
-   [`https://github.com/nhatnguyen10a1thd-png/vpc/blob/main/docs/services-and-prerequisites.md`](https://github.com/nhatnguyen10a1thd-png/vpc/blob/main/docs/services-and-prerequisites.md)
+### 7.1. Tài liệu Hướng dẫn & Thiết kế:
+1. **Hướng dẫn Triển khai Tuần 2 & Kịch bản Kiểm thử:**  
+   [`docs/week-02-implementation-guide.md`](docs/week-02-implementation-guide.md)
+2. **Thư mục lưu trữ & Danh mục 12 Ảnh minh chứng Tuần 2:**  
+   [`docs/evidence/week-02/README.md`](docs/evidence/week-02/README.md)
+3. **Sơ đồ & Tài liệu Thiết kế Kiến trúc tổng thể:**  
+   [`docs/architecture-design.md`](docs/architecture-design.md)
+4. **Bảng phân chia CIDR/Subnet & Ma trận Định tuyến:**  
+   [`docs/network-cidr-matrix.md`](docs/network-cidr-matrix.md)
+5. **Kế hoạch & Phương án kiểm thử toàn diện:**  
+   [`docs/test-plan.md`](docs/test-plan.md)
+6. **Nghiên cứu dịch vụ AWS, Ràng buộc LabRole & Tagging:**  
+   [`docs/services-and-prerequisites.md`](docs/services-and-prerequisites.md)
 
-### 7.2. Các liên kết Commit cụ thể:
-1. **Commit tài liệu thiết kế kiến trúc tuần 1 (Sơ đồ 2 VPC, strongSwan IPsec, CIDR/Subnet & Kế hoạch kiểm thử):**  
+### 7.2. Phương thức Triển khai & Cấu hình Tuần 2:
+- **Mô hình triển khai:** Thao tác trực tiếp (Hands-on manual configuration) trên AWS Management Console và Linux Terminal, kết hợp tự động hóa đàm phán IPsec.
+- **Tài liệu hướng dẫn thực hành:** Toàn bộ quy trình từng bước, thông số cấu hình và kịch bản kiểm thử được lưu trữ chi tiết trong [`docs/week-02-implementation-guide.md`](docs/week-02-implementation-guide.md).
+- **Bộ ảnh nghiệm thu:** Lưu trữ tại [`docs/evidence/week-02/`](docs/evidence/week-02/).
+
+### 7.3. Các liên kết Commit nộp bài:
+1. **Commit tài liệu thiết kế kiến trúc tuần 1:**  
    [`https://github.com/nhatnguyen10a1thd-png/vpc/commit/ee31f980a4f7f0bf9ae179ff97751d8ee241ced7`](https://github.com/nhatnguyen10a1thd-png/vpc/commit/ee31f980a4f7f0bf9ae179ff97751d8ee241ced7)
-2. **Commit tối ưu hóa hiển thị sơ đồ kiến trúc kích thước lớn, độ tương phản cao và rõ nét:**  
+2. **Commit tối ưu hóa hiển thị sơ đồ kiến trúc kích thước lớn:**  
    [`https://github.com/nhatnguyen10a1thd-png/vpc/commit/8f2a95166299b6422b5e28c467a98eb0ffef9e18`](https://github.com/nhatnguyen10a1thd-png/vpc/commit/8f2a95166299b6422b5e28c467a98eb0ffef9e18)
