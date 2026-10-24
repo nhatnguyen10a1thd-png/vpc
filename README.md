@@ -188,3 +188,31 @@ Hệ thống được thiết kế với 6 giai đoạn kiểm thử:
    [`https://github.com/nhatnguyen10a1thd-png/vpc/commit/ee31f980a4f7f0bf9ae179ff97751d8ee241ced7`](https://github.com/nhatnguyen10a1thd-png/vpc/commit/ee31f980a4f7f0bf9ae179ff97751d8ee241ced7)
 2. **Commit tối ưu hóa hiển thị sơ đồ kiến trúc kích thước lớn:**  
    [`https://github.com/nhatnguyen10a1thd-png/vpc/commit/8f2a95166299b6422b5e28c467a98eb0ffef9e18`](https://github.com/nhatnguyen10a1thd-png/vpc/commit/8f2a95166299b6422b5e28c467a98eb0ffef9e18)
+
+---
+
+## 8. Tiến độ thực hiện & Báo cáo Tuần 3: Route 53 Hybrid DNS, Giám sát CloudWatch, Đo đạc Hiệu năng & VGW Demo
+
+### 8.1. Các hạng mục đã thực hiện theo kế hoạch Tuần 3:
+- [x] **Triển khai Amazon Route 53 Private Hosted Zone (Cross-VPC):** Tạo Private Zone `corp.internal`, liên kết đa vùng (Cross-VPC Association giữa `us-east-1` và `us-west-2`), cấu hình bản ghi `app.corp.internal` (`10.20.10.50`) và `db.corp.internal` (`10.10.10.50`). Kiểm thử phân giải thành công bằng `dig`, `nslookup` và truy cập web `curl`.
+- [x] **Giám sát hệ thống với Amazon CloudWatch:** Cấu hình thu thập số liệu `CPUUtilization`, `NetworkIn`, `NetworkOut`, và `StatusCheckFailed` trên các EC2 Gateway; thiết lập 6 CloudWatch Alarms cảnh báo quá tải và rớt kết nối VPN bất thường.
+- [x] **Đo đạc Băng thông thực tế qua hầm IPsec (iperf3):** Chạy kiểm thử đo đạc thông lượng mạng giữa 2 Region đạt trung bình 35 - 50 Mbps với 0% packet loss, tối ưu hóa kích thước gói với TCP MSS Clamping (1380 bytes).
+- [x] **Kiểm thử Khả năng Tự phục hồi Dead Peer Detection (DPD):** Mô phỏng ngắt kết nối hầm VPN; kiểm chứng cơ chế DPD (`dpdaction=restart`) tự động tái đàm phán và khôi phục kênh truyền thông suốt trong vòng **dưới 10 giây**.
+- [x] **Thử nghiệm đối sánh AWS Virtual Private Gateway (VGW) & Xóa sạch:** Triển khai phương án 1 đầu VGW tại AWS Cloud kết nối với strongSwan On-Premises để quay video demo so sánh giải pháp theo yêu cầu riêng của đề tài; thực thi script dọn dẹp xóa sạch tài nguyên ngay sau buổi thực hành để tránh phát sinh chi phí ($0.05/giờ).
+
+### 8.2. Tài liệu & Kịch bản Tự động hóa Tuần 3:
+1. **Hướng dẫn Triển khai Chi tiết & Lệnh AWS CLI Tuần 3:**  
+   [`docs/week-03-implementation-guide.md`](docs/week-03-implementation-guide.md)
+2. **Kịch bản Triển khai Tự động Route 53 & CloudWatch:**  
+   [`infrastructure/deploy-week3.sh`](infrastructure/deploy-week3.sh)
+3. **Kịch bản Kiểm thử DNS Toàn diện (dig / nslookup / curl):**  
+   [`infrastructure/test-week3-dns.sh`](infrastructure/test-week3-dns.sh)
+4. **Kịch bản Benchmark Băng thông & Kiểm thử DPD Resilience:**  
+   [`infrastructure/test-week3-resilience.sh`](infrastructure/test-week3-resilience.sh)
+5. **Kịch bản Khởi tạo & Dọn dẹp VGW Demo (Zero Cost):**  
+   [`infrastructure/deploy-week3-vgw.sh`](infrastructure/deploy-week3-vgw.sh) & [`infrastructure/teardown-week3-vgw.sh`](infrastructure/teardown-week3-vgw.sh)
+
+### 8.3. Nhật ký công việc Tuần 3 (Worklog):
+- **Sinh viên thực hiện:** Nhat Nguyen ([@nhatnguyen10a1thd-png](https://github.com/nhatnguyen10a1thd-png))
+- **Tổng số giờ làm việc:** 10.5 giờ (Đạt yêu cầu ≥ 8 giờ/tuần).
+- **Phần có AI hỗ trợ:** Hỗ trợ thiết kế kịch bản CLI Route 53 Cross-VPC, template CloudWatch Alarms và kịch bản test resilience DPD (đã được sinh viên kiểm tra, xác thực và thực nghiệm trên AWS Learner Lab).
