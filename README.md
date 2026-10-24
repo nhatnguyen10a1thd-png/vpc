@@ -216,3 +216,11 @@ Hệ thống được thiết kế với 6 giai đoạn kiểm thử:
 - **Sinh viên thực hiện:** Nhat Nguyen ([@nhatnguyen10a1thd-png](https://github.com/nhatnguyen10a1thd-png))
 - **Tổng số giờ làm việc:** 10.5 giờ (Đạt yêu cầu ≥ 8 giờ/tuần).
 - **Phần có AI hỗ trợ:** Hỗ trợ thiết kế kịch bản CLI Route 53 Cross-VPC, template CloudWatch Alarms và kịch bản test resilience DPD (đã được sinh viên kiểm tra, xác thực và thực nghiệm trên AWS Learner Lab).
+
+### 8.4. Thư mục minh chứng & Các liên kết Commit nộp bài Tuần 3:
+1. **Thư mục lưu trữ & Danh mục 11 Ảnh minh chứng Tuần 3:**  
+   [`docs/evidence/week-03/README.md`](docs/evidence/week-03/README.md)
+2. **Commit cập nhật tài liệu triển khai và hướng dẫn thực hành Tuần 3:**  
+   [`https://github.com/nhatnguyen10a1thd-png/vpc/commit/aec3f01`](https://github.com/nhatnguyen10a1thd-png/vpc/commit/aec3f01)
+3. **Commit nộp đủ 11 ảnh minh chứng Tuần 3 lên GitHub:**  
+   [`https://github.com/nhatnguyen10a1thd-png/vpc/commit/d522cab`](https://github.com/nhatnguyen10a1thd-png/vpc/commit/d522cab)
