@@ -2,8 +2,9 @@
 # .gitignore - Hybrid Cloud VPN Project
 # ==============================================================================
 
-# Private local manual guides
+# Private local manual guides & summaries
 manual-guide/
+summary/
 
 # Infrastructure automation templates & scripts (hidden from public repository)
 infrastructure/
