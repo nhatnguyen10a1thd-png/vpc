@@ -8,6 +8,11 @@
 
 ---
 
+## 🎥 Video Demo Nghiệm thu Đề tài (Thời lượng ≤ 10 phút)
+* **Liên kết xem trực tiếp trên Google Drive:** [https://drive.google.com/file/d/1aF8-p0T0ejTv2hNPr3z3zeZkPbWPUSJB/view?usp=sharing](https://drive.google.com/file/d/1aF8-p0T0ejTv2hNPr3z3zeZkPbWPUSJB/view?usp=sharing)
+
+---
+
 ## Danh mục 8 ảnh minh chứng nghiệm thu Tuần 4
 
 | STT | Tên file ảnh minh chứng | Mô tả nội dung kiểm thử & nghiệm thu | Thành phần bắt buộc trong khung hình |

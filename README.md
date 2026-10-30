@@ -246,7 +246,8 @@ Hệ thống được thiết kế với 6 giai đoạn kiểm thử:
   - Xây dựng và kiểm thử hoàn chỉnh kịch bản tự động hóa `infrastructure/teardown-final.sh --force`.
   - Nhằm phục vụ buổi vấn đáp trực tiếp và chấm điểm nghiệm thu của Giảng viên hướng dẫn Huỳnh Xuân Phụng, các tài nguyên máy ảo hiện đang được duy trì ở trạng thái dừng/chờ (Standby). Ngay sau khi GVHD duyệt nghiệm thu xong, kịch bản sẽ được thực thi để giải phóng 100% tài nguyên, bảo đảm cước phí duy trì là **$0.00 / tháng**.
 - [x] **Biên tập Video Demo nghiệm thu & Hoàn thiện hồ sơ đề tài:**
-  - Biên tập video demo thuyết minh kỹ thuật hoàn chỉnh (thời lượng **≤ 10 phút**) đúng quy chế.
+  - Biên tập video demo thuyết minh kỹ thuật hoàn chỉnh (thời lượng **≤ 10 phút**) đúng quy chế môn học.
+  - 🎥 **Liên kết xem trực tiếp Video Demo (Google Drive):** [https://drive.google.com/file/d/1aF8-p0T0ejTv2hNPr3z3zeZkPbWPUSJB/view?usp=sharing](https://drive.google.com/file/d/1aF8-p0T0ejTv2hNPr3z3zeZkPbWPUSJB/view?usp=sharing)
   - Hoàn tất báo cáo tổng kết đề tài, đính kèm đầy đủ nhật ký làm việc (worklog), sơ đồ kiến trúc Vector, và mã nguồn chuẩn hóa nộp Giảng viên hướng dẫn Huỳnh Xuân Phụng.
 
 ### 9.2. Bảng đối soát chi phí thực tế 4 tuần (AWS Billing):
@@ -263,13 +264,15 @@ Hệ thống được thiết kế với 6 giai đoạn kiểm thử:
 | **TỔNG CỘNG** | **TOÀN BỘ ĐỀ TÀI MÔN HỌC** | **4 tuần thực nghiệm** | **~$5.56** | **An toàn (11.1% ngân sách $50)** |
 
 ### 9.3. Tài liệu & Kịch bản Tự động hóa Tuần 4:
-1. **Cẩm nang Hướng dẫn Thực hành Tuần 4 & Kịch bản Video Demo Nghiệm thu:**  
+1. **Video Demo Nghiệm thu Đề tài (Thời lượng ≤ 10 phút):**  
+   [`https://drive.google.com/file/d/1aF8-p0T0ejTv2hNPr3z3zeZkPbWPUSJB/view?usp=sharing`](https://drive.google.com/file/d/1aF8-p0T0ejTv2hNPr3z3zeZkPbWPUSJB/view?usp=sharing)
+2. **Cẩm nang Hướng dẫn Thực hành Tuần 4 & Kịch bản Video Demo Nghiệm thu:**  
    [`docs/week-04-implementation-guide.md`](docs/week-04-implementation-guide.md)
-2. **Kịch bản Tự động hóa Kiểm thử Toàn diện E2E:**  
+3. **Kịch bản Tự động hóa Kiểm thử Toàn diện E2E:**  
    `infrastructure/test-week4-end-to-end.sh`
-3. **Kịch bản Tự động hóa Dọn dẹp Toàn bộ Tài nguyên (Zero Cost):**  
+4. **Kịch bản Tự động hóa Dọn dẹp Toàn bộ Tài nguyên (Zero Cost):**  
    `infrastructure/teardown-final.sh`
-4. **Thư mục lưu trữ & Danh mục 8 Ảnh minh chứng Tuần 4:**  
+5. **Thư mục lưu trữ & Danh mục 8 Ảnh minh chứng Tuần 4:**  
    [`docs/evidence/week-04/README.md`](docs/evidence/week-04/README.md)
 
 ### 9.4. Nhật ký công việc Tuần 4 (Worklog):
@@ -277,6 +280,14 @@ Hệ thống được thiết kế với 6 giai đoạn kiểm thử:
 - **Tổng số giờ làm việc:** 11.0 giờ (Đạt yêu cầu ≥ 8 giờ/tuần).
 - **Tổng số giờ tích lũy 4 tuần:** 41.5 giờ (Tuần 1: 10h, Tuần 2: 10h, Tuần 3: 10.5h, Tuần 4: 11h).
 - **Phần có AI hỗ trợ:** Hỗ trợ thiết kế kịch bản E2E Test Suite, kịch bản teardown triệt để `teardown-final.sh`, cấu trúc phân cảnh Video Demo và bảng tổng hợp chi phí AWS Billing (sinh viên trực tiếp thực nghiệm, quay video và kiểm chứng trên AWS Learner Lab).
+
+### 9.5. Thư mục minh chứng & Các liên kết Commit nộp bài Tuần 4:
+1. **Thư mục lưu trữ & Danh mục 8 Ảnh minh chứng Tuần 4:**  
+   [`docs/evidence/week-04/README.md`](docs/evidence/week-04/README.md)
+2. **Commit nộp đủ 8 ảnh minh chứng, kịch bản E2E và tài liệu Tuần 4:**  
+   [`https://github.com/nhatnguyen10a1thd-png/vpc/commit/c224da3`](https://github.com/nhatnguyen10a1thd-png/vpc/commit/c224da3)
+3. **Liên kết Video Demo nghiệm thu đề tài trên Google Drive (≤ 10 phút):**  
+   [`https://drive.google.com/file/d/1aF8-p0T0ejTv2hNPr3z3zeZkPbWPUSJB/view?usp=sharing`](https://drive.google.com/file/d/1aF8-p0T0ejTv2hNPr3z3zeZkPbWPUSJB/view?usp=sharing)
 
 ---
 
