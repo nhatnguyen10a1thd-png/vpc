@@ -288,7 +288,9 @@ Hệ thống được thiết kế với 6 giai đoạn kiểm thử:
    [`https://github.com/nhatnguyen10a1thd-png/vpc/commit/c224da3`](https://github.com/nhatnguyen10a1thd-png/vpc/commit/c224da3)
 3. **Commit bổ sung liên kết Video Demo nghiệm thu vào báo cáo và README:**  
    [`https://github.com/nhatnguyen10a1thd-png/vpc/commit/93ff852`](https://github.com/nhatnguyen10a1thd-png/vpc/commit/93ff852)
-4. **Liên kết Video Demo nghiệm thu đề tài trên Google Drive (≤ 10 phút):**  
+4. **Commit bổ sung kịch bản teardown-final.sh và đồng bộ hồ sơ nghiệm thu nộp lại:**  
+   [`https://github.com/nhatnguyen10a1thd-png/vpc/commit/09a23b2`](https://github.com/nhatnguyen10a1thd-png/vpc/commit/09a23b2)
+5. **Liên kết Video Demo nghiệm thu đề tài trên Google Drive (≤ 10 phút):**  
    [`https://drive.google.com/file/d/1aF8-p0T0ejTv2hNPr3z3zeZkPbWPUSJB/view?usp=sharing`](https://drive.google.com/file/d/1aF8-p0T0ejTv2hNPr3z3zeZkPbWPUSJB/view?usp=sharing)
 
 ---
