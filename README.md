@@ -243,7 +243,7 @@ Hệ thống được thiết kế với 6 giai đoạn kiểm thử:
   - Đối chiếu và xác nhận: Tổng chi phí 4 tuần học chỉ tiêu tốn **`~$5.56`**, chỉ chiếm **~11.1%** hạn mức ngân sách `$50.00` được cấp.
   - Phân tích hiệu quả kinh tế: Giải pháp VPN phần mềm strongSwan chạy trên EC2 `t3.micro` tiết kiệm **> 90%** so với AWS Site-to-Site VPN chính hãng ($72.00/tháng).
 - [x] **Dọn dẹp toàn bộ tài nguyên (Final Teardown Script & Standby Plan):**
-  - Xây dựng và kiểm thử hoàn chỉnh kịch bản tự động hóa `infrastructure/teardown-final.sh --force`.
+  - Xây dựng, hoàn thiện và kiểm thử kịch bản tự động hóa [`infrastructure/teardown-final.sh`](infrastructure/teardown-final.sh) kết hợp quy trình dọn dẹp bằng tay tại [PHẦN 3 của Cẩm nang Tuần 4](docs/week-04-implementation-guide.md#phần-3-dọn-dẹp-toàn-bộ-tài-nguyên-final-teardown).
   - Nhằm phục vụ buổi vấn đáp trực tiếp và chấm điểm nghiệm thu của Giảng viên hướng dẫn Huỳnh Xuân Phụng, các tài nguyên máy ảo hiện đang được duy trì ở trạng thái dừng/chờ (Standby). Ngay sau khi GVHD duyệt nghiệm thu xong, kịch bản sẽ được thực thi để giải phóng 100% tài nguyên, bảo đảm cước phí duy trì là **$0.00 / tháng**.
 - [x] **Biên tập Video Demo nghiệm thu & Hoàn thiện hồ sơ đề tài:**
   - Biên tập video demo thuyết minh kỹ thuật hoàn chỉnh (thời lượng **≤ 10 phút**) đúng quy chế môn học.
@@ -269,9 +269,9 @@ Hệ thống được thiết kế với 6 giai đoạn kiểm thử:
 2. **Cẩm nang Hướng dẫn Thực hành Tuần 4 & Kịch bản Video Demo Nghiệm thu:**  
    [`docs/week-04-implementation-guide.md`](docs/week-04-implementation-guide.md)
 3. **Kịch bản Tự động hóa Kiểm thử Toàn diện E2E:**  
-   `infrastructure/test-week4-end-to-end.sh`
+   [`infrastructure/test-week4-end-to-end.sh`](infrastructure/test-week4-end-to-end.sh)
 4. **Kịch bản Tự động hóa Dọn dẹp Toàn bộ Tài nguyên (Zero Cost):**  
-   `infrastructure/teardown-final.sh`
+   [`infrastructure/teardown-final.sh`](infrastructure/teardown-final.sh)
 5. **Thư mục lưu trữ & Danh mục 8 Ảnh minh chứng Tuần 4:**  
    [`docs/evidence/week-04/README.md`](docs/evidence/week-04/README.md)
 
@@ -286,7 +286,9 @@ Hệ thống được thiết kế với 6 giai đoạn kiểm thử:
    [`docs/evidence/week-04/README.md`](docs/evidence/week-04/README.md)
 2. **Commit nộp đủ 8 ảnh minh chứng, kịch bản E2E và tài liệu Tuần 4:**  
    [`https://github.com/nhatnguyen10a1thd-png/vpc/commit/c224da3`](https://github.com/nhatnguyen10a1thd-png/vpc/commit/c224da3)
-3. **Liên kết Video Demo nghiệm thu đề tài trên Google Drive (≤ 10 phút):**  
+3. **Commit bổ sung liên kết Video Demo nghiệm thu vào báo cáo và README:**  
+   [`https://github.com/nhatnguyen10a1thd-png/vpc/commit/93ff852`](https://github.com/nhatnguyen10a1thd-png/vpc/commit/93ff852)
+4. **Liên kết Video Demo nghiệm thu đề tài trên Google Drive (≤ 10 phút):**  
    [`https://drive.google.com/file/d/1aF8-p0T0ejTv2hNPr3z3zeZkPbWPUSJB/view?usp=sharing`](https://drive.google.com/file/d/1aF8-p0T0ejTv2hNPr3z3zeZkPbWPUSJB/view?usp=sharing)
 
 ---

@@ -1,0 +1,231 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Hybrid Cloud Site-to-Site VPN Simulation - On-Premises VPC Foundation (us-west-2)
+  Course: Cloud - Dot 1 - 2026-2027 | GVHD: Huynh Xuan Phung | Student: Nhat Nguyen
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: Hybrid-Cloud-VPN
+    Description: Project identifier for resource naming and tagging
+  Environment:
+    Type: String
+    Default: Lab-Simulation
+    Description: Environment stage
+  Course:
+    Type: String
+    Default: Cloud-Dot1-2026-2027
+    Description: Academic course identification
+  Instructor:
+    Type: String
+    Default: HuynhXuanPhung
+    Description: Academic supervisor
+  Owner:
+    Type: String
+    Default: NhatNguyen
+    Description: Project author
+
+Resources:
+  # =========================================================================
+  # SIMULATED ON-PREMISES VPC (us-west-2 - Oregon - 10.10.0.0/16)
+  # =========================================================================
+  OnPremVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.10.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${ProjectName}-vpc-onprem'
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Course
+          Value: !Ref Course
+        - Key: Instructor
+          Value: !Ref Instructor
+        - Key: Owner
+          Value: !Ref Owner
+
+  OnPremInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub '${ProjectName}-igw-onprem'
+        - Key: Project
+          Value: !Ref ProjectName
+
+  AttachOnPremIGW:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref OnPremVPC
+      InternetGatewayId: !Ref OnPremInternetGateway
+
+  OnPremVPNSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref OnPremVPC
+      CidrBlock: 10.10.1.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${ProjectName}-onprem-vpn-subnet-a'
+        - Key: Type
+          Value: Public-Gateway
+        - Key: Project
+          Value: !Ref ProjectName
+
+  OnPremWorkloadSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref OnPremVPC
+      CidrBlock: 10.10.10.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub '${ProjectName}-onprem-workload-subnet-a'
+        - Key: Type
+          Value: Private-Workload
+        - Key: Project
+          Value: !Ref ProjectName
+
+  OnPremPublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref OnPremVPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${ProjectName}-rtb-onprem-public'
+        - Key: Project
+          Value: !Ref ProjectName
+
+  OnPremPublicDefaultRoute:
+    Type: AWS::EC2::Route
+    DependsOn: AttachOnPremIGW
+    Properties:
+      RouteTableId: !Ref OnPremPublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref OnPremInternetGateway
+
+  OnPremVPNSubnetRouteTableAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref OnPremVPNSubnet
+      RouteTableId: !Ref OnPremPublicRouteTable
+
+  OnPremPrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref OnPremVPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${ProjectName}-rtb-onprem-private'
+        - Key: Project
+          Value: !Ref ProjectName
+
+  OnPremWorkloadSubnetRouteTableAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref OnPremWorkloadSubnet
+      RouteTableId: !Ref OnPremPrivateRouteTable
+
+  # Security Groups
+  OnPremVPNGatewaySG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for On-Premises strongSwan Edge Gateway
+      VpcId: !Ref OnPremVPC
+      SecurityGroupIngress:
+        - IpProtocol: udp
+          FromPort: 500
+          ToPort: 500
+          CidrIp: 0.0.0.0/0
+          Description: IKE SA negotiation
+        - IpProtocol: udp
+          FromPort: 4500
+          ToPort: 4500
+          CidrIp: 0.0.0.0/0
+          Description: NAT-Traversal IPsec
+        - IpProtocol: '50'
+          CidrIp: 0.0.0.0/0
+          Description: ESP protocol
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+          Description: SSH administration
+        - IpProtocol: icmp
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+          Description: ICMP ping diagnostics
+        - IpProtocol: -1
+          CidrIp: 10.20.0.0/16
+          Description: Allow all traffic routed from Cloud network (10.20.0.0/16)
+      Tags:
+        - Key: Name
+          Value: !Sub '${ProjectName}-sg-onprem-gateway'
+        - Key: Project
+          Value: !Ref ProjectName
+
+  OnPremWorkloadSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for internal On-Premises workloads (isolated)
+      VpcId: !Ref OnPremVPC
+      SecurityGroupIngress:
+        - IpProtocol: icmp
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 10.20.0.0/16
+          Description: Allow ICMP from Cloud
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 10.20.0.0/16
+          Description: Allow HTTP traffic from Cloud
+        - IpProtocol: tcp
+          FromPort: 5201
+          ToPort: 5201
+          CidrIp: 10.20.0.0/16
+          Description: Allow iperf3 throughput testing
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 10.10.1.0/24
+          Description: Allow SSH bastion jumping from VPN subnet
+      Tags:
+        - Key: Name
+          Value: !Sub '${ProjectName}-sg-onprem-workload'
+        - Key: Project
+          Value: !Ref ProjectName
+
+Outputs:
+  OnPremVPCId:
+    Description: VPC ID of Simulated On-Premises VPC
+    Value: !Ref OnPremVPC
+    Export:
+      Name: !Sub '${ProjectName}-OnPremVPCId'
+  OnPremVPNSubnetId:
+    Description: Subnet ID for On-Prem strongSwan Gateway
+    Value: !Ref OnPremVPNSubnet
+  OnPremWorkloadSubnetId:
+    Description: Subnet ID for On-Prem Workload Server
+    Value: !Ref OnPremWorkloadSubnet
+  OnPremGatewaySGId:
+    Description: Security Group ID for Gateway
+    Value: !Ref OnPremVPNGatewaySG
+  OnPremWorkloadSGId:
+    Description: Security Group ID for Workload
+    Value: !Ref OnPremWorkloadSG
+  OnPremPublicRouteTableId:
+    Description: Public Route Table ID
+    Value: !Ref OnPremPublicRouteTable
+  OnPremPrivateRouteTableId:
+    Description: Private Route Table ID
+    Value: !Ref OnPremPrivateRouteTable

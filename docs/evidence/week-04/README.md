@@ -29,6 +29,7 @@
 ---
 
 > [!NOTE]
-> **Lưu ý về dọn dẹp tài nguyên (Teardown):**  
-> Kịch bản dọn dẹp tự động hóa [`infrastructure/teardown-final.sh`](https://github.com/nhatnguyen10a1thd-png/vpc/blob/main/infrastructure/teardown-final.sh) đã được xây dựng, kiểm thử cú pháp và sẵn sàng thực thi.  
-> Các tài nguyên máy ảo hiện đang được duy trì ở trạng thái dừng/chờ (Standby) để phục vụ buổi vấn đáp trực tiếp và chấm điểm nghiệm thu của Giảng viên hướng dẫn Huỳnh Xuân Phụng. Ngay sau khi giảng viên duyệt xong, kịch bản sẽ được thực thi để giải phóng 100% tài nguyên, bảo đảm cước phí duy trì sau môn học là **$0.00**.
+> **Quy trình dọn dẹp tài nguyên (Final Teardown):**  
+> 1. **Kịch bản tự động hóa:** Mã nguồn kịch bản dọn dẹp triệt để [`infrastructure/teardown-final.sh`](https://github.com/nhatnguyen10a1thd-png/vpc/blob/main/infrastructure/teardown-final.sh) (xem cục bộ tại [`infrastructure/teardown-final.sh`](../../../infrastructure/teardown-final.sh)) đã được hoàn thiện, kiểm thử cú pháp và sẵn sàng thực thi để thu hồi toàn bộ tài nguyên.  
+> 2. **Quy trình thao tác bằng tay (Manual Click-Ops):** Hướng dẫn chi tiết từng bước dọn dẹp trên AWS Console theo đúng thứ tự chuẩn chống xung đột phụ thuộc được trình bày đầy đủ tại [PHẦN 3 của Cẩm nang Hướng dẫn Thực hành Tuần 4](../../week-04-implementation-guide.md#phần-3-dọn-dẹp-toàn-bộ-tài-nguyên-final-teardown).  
+> 3. **Trạng thái tài nguyên hiện tại:** Các máy ảo EC2 hiện đang được duy trì ở trạng thái dừng/chờ (Standby) để phục vụ buổi vấn đáp trực tiếp và chấm điểm nghiệm thu của Giảng viên hướng dẫn Huỳnh Xuân Phụng. Ngay sau khi GVHD duyệt nghiệm thu xong, sinh viên sẽ kích hoạt lệnh dọn dẹp để giải phóng 100% tài nguyên, bảo đảm cước phí duy trì sau môn học là **$0.00**.
