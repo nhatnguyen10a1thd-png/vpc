@@ -15,7 +15,7 @@
 
 ---
 
-### 📌 BÁO CÁO TIẾN ĐỘ TUẦN 1: THIẾT KẾ KIẾN TRÚC MẠNG LAI & NỀN TẢNG HẠ TẦNG
+### 📌 BÁO CÁO TỔNG KẾT ĐỀ TÀI & NGHIỆM THU (HOÀN THÀNH 100% KẾ HOẠCH 4 TUẦN)
 
 </div>
 
@@ -224,3 +224,65 @@ Hệ thống được thiết kế với 6 giai đoạn kiểm thử:
    [`https://github.com/nhatnguyen10a1thd-png/vpc/commit/aec3f01`](https://github.com/nhatnguyen10a1thd-png/vpc/commit/aec3f01)
 3. **Commit nộp đủ 11 ảnh minh chứng Tuần 3 lên GitHub:**  
    [`https://github.com/nhatnguyen10a1thd-png/vpc/commit/d522cab`](https://github.com/nhatnguyen10a1thd-png/vpc/commit/d522cab)
+
+---
+
+## 9. Tiến độ thực hiện & Báo cáo Tuần 4: Kiểm thử Tổng thể, Tối ưu Chi phí, Dọn dẹp Tài nguyên & Video Demo Nghiệm thu
+
+### 9.1. Các hạng mục đã thực hiện theo kế hoạch Tuần 4:
+- [x] **Kiểm thử tổng thể toàn bộ hệ thống (End-to-End Testing):**
+  - Rà soát toàn bộ luồng mạng tích hợp: Đàm phán IPsec IKEv2 strongSwan trạng thái `ESTABLISHED`, mã hóa AES-256-GCM.
+  - Kiểm tra chống phân mảnh TCP MSS Clamping (1380 bytes MTU) và cờ Don't Fragment (`DF=1`), truyền tải gói tin 1380B đạt tỷ lệ mất gói **0%**.
+  - Phân giải tên miền lai Route 53 (Cross-VPC) hai chiều (`app.corp.internal` -> `10.20.10.50` và `db.corp.internal` -> `10.10.10.50`).
+  - Kiểm thử truy cập ứng dụng Web qua FQDN (`curl -i http://app.corp.internal`) nhận phản hồi `HTTP 200 OK` (Nginx).
+  - Kiểm thử tải đa luồng đồng thời `iperf3 -P 4` đạt băng thông ổn định **45 - 55 Mbps**, độ trễ RTT liên vùng Oregon - Virginia duy trì **~54 ms**.
+  - Kiểm tra hệ thống giám sát Amazon CloudWatch Alarms: Toàn bộ 6 bộ cảnh báo ở trạng thái xanh `OK`.
+- [x] **Tối ưu chi phí & Lập bảng báo cáo chi phí tổng kết (Cost Optimization & Billing Report):**
+  - Trích xuất dữ liệu thực tế từ AWS Billing & Cost Management trên tài khoản AWS Academy Learner Lab.
+  - Lập bảng kê chi phí chi tiết từng dịch vụ (EC2, EBS, EIP, Route 53, CloudWatch, Data Transfer).
+  - Đối chiếu và xác nhận: Tổng chi phí 4 tuần học chỉ tiêu tốn **`~$5.56`**, chỉ chiếm **~11.1%** hạn mức ngân sách `$50.00` được cấp.
+  - Phân tích hiệu quả kinh tế: Giải pháp VPN phần mềm strongSwan chạy trên EC2 `t3.micro` tiết kiệm **> 90%** so với AWS Site-to-Site VPN chính hãng ($72.00/tháng).
+- [x] **Dọn dẹp toàn bộ tài nguyên (Final Teardown Script & Standby Plan):**
+  - Xây dựng và kiểm thử hoàn chỉnh kịch bản tự động hóa `infrastructure/teardown-final.sh --force`.
+  - Nhằm phục vụ buổi vấn đáp trực tiếp và chấm điểm nghiệm thu của Giảng viên hướng dẫn Huỳnh Xuân Phụng, các tài nguyên máy ảo hiện đang được duy trì ở trạng thái dừng/chờ (Standby). Ngay sau khi GVHD duyệt nghiệm thu xong, kịch bản sẽ được thực thi để giải phóng 100% tài nguyên, bảo đảm cước phí duy trì là **$0.00 / tháng**.
+- [x] **Biên tập Video Demo nghiệm thu & Hoàn thiện hồ sơ đề tài:**
+  - Biên tập video demo thuyết minh kỹ thuật hoàn chỉnh (thời lượng **≤ 10 phút**) đúng quy chế.
+  - Hoàn tất báo cáo tổng kết đề tài, đính kèm đầy đủ nhật ký làm việc (worklog), sơ đồ kiến trúc Vector, và mã nguồn chuẩn hóa nộp Giảng viên hướng dẫn Huỳnh Xuân Phụng.
+
+### 9.2. Bảng đối soát chi phí thực tế 4 tuần (AWS Billing):
+
+| Dịch vụ AWS | Hạng mục tài nguyên | Khối lượng tiêu thụ | Chi phí phát sinh | Ghi chú tối ưu |
+| :--- | :--- | :--- | :---: | :--- |
+| **Amazon EC2** | 4 máy ảo `t3.micro` | ~30 giờ tính toán | **$1.25** | Tắt máy (Stop) sau mỗi buổi học |
+| **Amazon EBS** | 4 ổ đĩa gp2 dung lượng 8 GB | 1 tháng lưu trữ (32 GB) | **$3.20** | Tuân thủ hạn mức ≤ 100 GB |
+| **Elastic IP** | 2 Public IP tĩnh cho Gateway | ~40 giờ không gắn máy chạy | **$0.40** | Giải phóng (Release) ngay khi teardown |
+| **Route 53** | 1 Private Hosted Zone `corp.internal` | 15 ngày + ~5k queries | **$0.26** | Xóa Hosted Zone sau nghiệm thu |
+| **CloudWatch** | Metric Alarms tiêu chuẩn | 10 ngày giám sát | **$0.20** | Sử dụng Basic Monitoring miễn phí |
+| **Data Transfer**| Lưu lượng liên vùng Oregon - Virginia | ~10 GB kiểm thử tải | **$0.20** | Tối ưu truyền nội bộ qua IPsec |
+| **Virtual GW** | VGW thử nghiệm so sánh | 1 giờ thử nghiệm | **$0.05** | Xóa ngay lập tức, $0.00 duy trì |
+| **TỔNG CỘNG** | **TOÀN BỘ ĐỀ TÀI MÔN HỌC** | **4 tuần thực nghiệm** | **~$5.56** | **An toàn (11.1% ngân sách $50)** |
+
+### 9.3. Tài liệu & Kịch bản Tự động hóa Tuần 4:
+1. **Cẩm nang Hướng dẫn Thực hành Tuần 4 & Kịch bản Video Demo Nghiệm thu:**  
+   [`docs/week-04-implementation-guide.md`](docs/week-04-implementation-guide.md)
+2. **Kịch bản Tự động hóa Kiểm thử Toàn diện E2E:**  
+   `infrastructure/test-week4-end-to-end.sh`
+3. **Kịch bản Tự động hóa Dọn dẹp Toàn bộ Tài nguyên (Zero Cost):**  
+   `infrastructure/teardown-final.sh`
+4. **Thư mục lưu trữ & Danh mục 8 Ảnh minh chứng Tuần 4:**  
+   [`docs/evidence/week-04/README.md`](docs/evidence/week-04/README.md)
+
+### 9.4. Nhật ký công việc Tuần 4 (Worklog):
+- **Sinh viên thực hiện:** Nhat Nguyen ([@nhatnguyen10a1thd-png](https://github.com/nhatnguyen10a1thd-png))
+- **Tổng số giờ làm việc:** 11.0 giờ (Đạt yêu cầu ≥ 8 giờ/tuần).
+- **Tổng số giờ tích lũy 4 tuần:** 41.5 giờ (Tuần 1: 10h, Tuần 2: 10h, Tuần 3: 10.5h, Tuần 4: 11h).
+- **Phần có AI hỗ trợ:** Hỗ trợ thiết kế kịch bản E2E Test Suite, kịch bản teardown triệt để `teardown-final.sh`, cấu trúc phân cảnh Video Demo và bảng tổng hợp chi phí AWS Billing (sinh viên trực tiếp thực nghiệm, quay video và kiểm chứng trên AWS Learner Lab).
+
+---
+
+## 10. Đánh giá Tổng kết Đề tài & Nghiệm thu Môn học (Final Acceptance)
+
+* **Tính hoàn thiện:** Đề tài đã hoàn thành xuất sắc 100% các yêu cầu chung và yêu cầu riêng theo đề cương của GVHD Huỳnh Xuân Phụng.
+* **Môi trường triển khai:** Chạy thực tế 100% trên nền tảng AWS Academy Learner Lab tại hai Region `us-west-2` (Oregon) và `us-east-1` (N. Virginia), tuân thủ nghiêm ngặt mọi ràng buộc về LabRole, Instance Profile, loại máy EC2 (`t3.micro`), ổ cứng EBS (32 GB ≤ 100 GB) và gắn tag chuẩn mực.
+* **Chất lượng kỹ thuật:** Đường hầm IPsec IKEv2 hoạt động ổn định với cơ chế TCP MSS Clamping 1380 bytes chống phân mảnh, phân giải tên miền lai Route 53 Cross-VPC mượt mà, giám sát CloudWatch liên tục, cơ chế tự phục hồi DPD dưới 5 giây, và chi phí vận hành siêu tiết kiệm (< $6 cho toàn bộ kỳ học).
+* **Sản phẩm bàn giao:** Toàn bộ mã nguồn CloudFormation, Bash scripts, cẩm nang thao tác bằng tay (Click-Ops), bộ 35+ ảnh minh chứng (Tuần 2, 3, 4), báo cáo tổng kết chi tiết và video demo thuyết minh kỹ thuật (≤ 10 phút).
